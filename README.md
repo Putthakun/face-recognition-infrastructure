@@ -4,7 +4,7 @@ Infrastructure layer for the Face Recognition Attendance System. Provides shared
 
 ## Architecture
 
-![Architecture](https://github.com/user-attachments/assets/b1b0ff8f-051d-4830-b5e3-c74f584c507b)
+![Architecture](https://github.com/user-attachments/assets/a7a6027c-1bed-4b00-86d7-5c2a3cb154ce)
 
 ## Services
 
