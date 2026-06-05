@@ -4,19 +4,7 @@ Infrastructure layer for the Face Recognition Attendance System. Provides shared
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────┐
-│              face-infra (Docker Network)         │
-│                                                  │
-│  ┌─────────────┐  ┌───────┐  ┌──────────────┐  │
-│  │  Azure SQL  │  │ Redis │  │  RabbitMQ    │  │
-│  │    Edge     │  │       │  │ + Management │  │
-│  │  port 1433  │  │  6379 │  │  5672/15672  │  │
-│  └─────────────┘  └───────┘  └──────────────┘  │
-└─────────────────────────────────────────────────┘
-         ↑               ↑               ↑
-   face-recognition-server / edge / web (join network)
-```
+![Architecture](https://github.com/user-attachments/assets/b1b0ff8f-051d-4830-b5e3-c74f584c507b)
 
 ## Services
 
@@ -25,6 +13,8 @@ Infrastructure layer for the Face Recognition Attendance System. Provides shared
 | Azure SQL Edge | `mcr.microsoft.com/azure-sql-edge` | `1433` | Primary database (T-SQL, ARM64 native) |
 | Redis | `redis:7-alpine` | `6379` | Cache & session store |
 | RabbitMQ | `rabbitmq:3-management-alpine` | `5672` / `15672` | Async face processing queue |
+| Prometheus | `prom/prometheus` | `9090` | Metrics collection |
+| Grafana | `grafana/grafana` | `3000` | Metrics dashboard |
 
 ## Quick Start
 
@@ -84,8 +74,14 @@ face-recognition-infra/
 ├── .env.example                # Environment variable template
 ├── Makefile                    # Shortcut commands
 ├── config/
-│   └── rabbitmq/
-│       └── rabbitmq.conf       # Memory & disk limits
+│   ├── rabbitmq/
+│   │   └── rabbitmq.conf       # Memory & disk limits
+│   ├── prometheus/
+│   │   └── prometheus.yml      # Scrape config
+│   └── grafana/
+│       └── provisioning/
+│           └── datasources/
+│               └── prometheus.yml  # Auto-connect Grafana → Prometheus
 └── init/
     └── sqlserver/
         └── 01_init.sql         # Database initialization script
@@ -100,9 +96,13 @@ face-recognition-infra/
 | `REDIS_PASSWORD` | Redis auth password |
 | `RABBITMQ_USER` | RabbitMQ username |
 | `RABBITMQ_PASSWORD` | RabbitMQ password |
+| `GRAFANA_USER` | Grafana admin username |
+| `GRAFANA_PASSWORD` | Grafana admin password |
 
-## RabbitMQ Management UI
+## Web UIs
 
-Open [http://localhost:15672](http://localhost:15672) after running `make up`
-
-Login with `RABBITMQ_USER` / `RABBITMQ_PASSWORD` from your `.env` file.
+| Service | URL | Credentials |
+|---------|-----|-------------|
+| Grafana | [http://localhost:3000](http://localhost:3000) | `GRAFANA_USER` / `GRAFANA_PASSWORD` |
+| Prometheus | [http://localhost:9090](http://localhost:9090) | — |
+| RabbitMQ | [http://localhost:15672](http://localhost:15672) | `RABBITMQ_USER` / `RABBITMQ_PASSWORD` |
