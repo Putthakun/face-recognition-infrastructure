@@ -1,0 +1,5 @@
+# Environment variables — ห้าม commit เด็ดขาด
+.env
+
+# macOS
+.DS_Store
