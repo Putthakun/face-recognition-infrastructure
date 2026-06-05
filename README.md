@@ -29,35 +29,35 @@ Infrastructure layer for the Face Recognition Attendance System. Provides shared
 ## Quick Start
 
 ```bash
-# 1. clone และ setup
+# 1. Clone the repository
 git clone <repo>
 cd face-recognition-infra
 
-# 2. สร้าง .env (สร้างอัตโนมัติตอน make up)
+# 2. Create .env from template (auto-created on first make up)
 cp .env.example .env
-# แก้ passwords ใน .env ก่อน
+# Edit passwords in .env before starting
 
-# 3. start
+# 3. Start all services
 make up
 
-# 4. ตรวจสอบ
+# 4. Verify services are healthy
 make ps
 ```
 
 ## Commands
 
 ```bash
-make up                        # start ทุก service
-make down                      # stop ทุก service
-make restart service=redis     # restart เฉพาะ service
-make logs service=sqlserver    # ดู log realtime
-make ps                        # ดู status และ health
-make clean                     # ลบทุกอย่างรวม volumes (ข้อมูลหาย)
+make up                        # Start all services
+make down                      # Stop all services
+make restart service=redis     # Restart a specific service
+make logs service=sqlserver    # Stream logs for a specific service
+make ps                        # Show status and health
+make clean                     # Remove all containers and volumes (data will be lost)
 ```
 
 ## Connecting from Other Services
 
-เพิ่มใน `docker-compose.yml` ของ service อื่น:
+Add the following to your service's `docker-compose.yml`:
 
 ```yaml
 networks:
@@ -80,15 +80,15 @@ services:
 
 ```
 face-recognition-infra/
-├── docker-compose.yml          # service definitions
-├── .env.example                # environment variable template
-├── Makefile                    # shortcut commands
+├── docker-compose.yml          # Service definitions
+├── .env.example                # Environment variable template
+├── Makefile                    # Shortcut commands
 ├── config/
 │   └── rabbitmq/
-│       └── rabbitmq.conf       # memory & disk limits
+│       └── rabbitmq.conf       # Memory & disk limits
 └── init/
     └── sqlserver/
-        └── 01_init.sql         # database initialization script
+        └── 01_init.sql         # Database initialization script
 ```
 
 ## Environment Variables
@@ -103,6 +103,6 @@ face-recognition-infra/
 
 ## RabbitMQ Management UI
 
-เปิด [http://localhost:15672](http://localhost:15672) หลังจาก `make up`
+Open [http://localhost:15672](http://localhost:15672) after running `make up`
 
-Login ด้วย `RABBITMQ_USER` / `RABBITMQ_PASSWORD` ใน `.env`
+Login with `RABBITMQ_USER` / `RABBITMQ_PASSWORD` from your `.env` file.
