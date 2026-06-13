@@ -97,11 +97,11 @@ face-recognition-infra/
 
 ## Related Services
 
-This is the shared infrastructure layer for a larger system. See [`real-time-face-recognition-attendance-system`](../real-time-face-recognition-attendance-system) for the full architecture overview.
+This is the shared infrastructure layer for a larger system. See [`real-time-face-recognition-attendance-system`](https://github.com/Putthakun/real-time-face-recognition-attendance-system) for the full architecture overview.
 
 | Repo | Role |
 |---|---|
-| [`face-recognition-api`](../face-recognition-api) | System of record — employees, cameras, transactions, auth |
-| [`face-recognition-edge`](../face-recognition-edge) | Captures video, detects faces (YOLOv8), publishes crops to RabbitMQ |
-| [`face-recognition-server`](../face-recognition-server) | Matches faces (InsightFace), records transactions |
-| [`face-recognition-web`](../face-recognition-web) | Vue 3 dashboard for admins/supervisors |
+| [`face-recognition-api`](https://github.com/Putthakun/face-recognition-api) | System of record — employees, cameras, transactions, auth |
+| [`face-recognition-edge`](https://github.com/Putthakun/face-recognition-edge) | Captures video, detects faces (YOLOv8), publishes crops to RabbitMQ |
+| [`face-recognition-server`](https://github.com/Putthakun/face-recognition-server) | Matches faces (InsightFace), records transactions |
+| [`face-recognition-web`](https://github.com/Putthakun/face-recognition-web) | Vue 3 dashboard for admins/supervisors |
