@@ -9,8 +9,6 @@ volumes:
   sqlserver_data:
   redis_data:
   rabbitmq_data:
-  prometheus_data:
-  grafana_data:
 
 x-common: &common
   restart: unless-stopped
@@ -24,6 +22,8 @@ services:
     <<: *common
     image: mcr.microsoft.com/azure-sql-edge:latest
     container_name: infra-sqlserver
+    security_opt:
+      - seccomp:unconfined
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
@@ -99,58 +99,4 @@ services:
       resources:
         limits:
           memory: 512m
-          cpus: "0.5"
-
-  # ── Prometheus (Metrics collector) ──────────────────────────────────────────
-  prometheus:
-    <<: *common
-    image: prom/prometheus:latest
-    container_name: infra-prometheus
-    command:
-      - --config.file=/etc/prometheus/prometheus.yml
-      - --storage.tsdb.retention.time=7d
-    volumes:
-      - prometheus_data:/prometheus
-      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-    ports:
-      - "127.0.0.1:9090:9090"
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
-    deploy:
-      resources:
-        limits:
-          memory: 512m
-          cpus: "0.5"
-
-  # ── Grafana (Metrics dashboard) ──────────────────────────────────────────────
-  grafana:
-    <<: *common
-    image: grafana/grafana:latest
-    container_name: infra-grafana
-    environment:
-      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
-      GF_USERS_ALLOW_SIGN_UP: "false"
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./config/grafana/provisioning:/etc/grafana/provisioning:ro
-    ports:
-      - "127.0.0.1:3000:3000"
-    depends_on:
-      prometheus:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    deploy:
-      resources:
-        limits:
-          memory: 256m
           cpus: "0.5"

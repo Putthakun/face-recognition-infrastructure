@@ -13,8 +13,6 @@ Infrastructure layer for the Face Recognition Attendance System. Provides shared
 | Azure SQL Edge | `mcr.microsoft.com/azure-sql-edge` | `1433` | Primary database (T-SQL, ARM64 native) |
 | Redis | `redis:7-alpine` | `6379` | Cache & session store |
 | RabbitMQ | `rabbitmq:3-management-alpine` | `5672` / `15672` | Async face processing queue |
-| Prometheus | `prom/prometheus` | `9090` | Metrics collection |
-| Grafana | `grafana/grafana` | `3000` | Metrics dashboard |
 
 ## Quick Start
 
@@ -74,14 +72,8 @@ face-recognition-infra/
 ├── .env.example                # Environment variable template
 ├── Makefile                    # Shortcut commands
 ├── config/
-│   ├── rabbitmq/
-│   │   └── rabbitmq.conf       # Memory & disk limits
-│   ├── prometheus/
-│   │   └── prometheus.yml      # Scrape config
-│   └── grafana/
-│       └── provisioning/
-│           └── datasources/
-│               └── prometheus.yml  # Auto-connect Grafana → Prometheus
+│   └── rabbitmq/
+│       └── rabbitmq.conf       # Memory & disk limits
 └── init/
     └── sqlserver/
         └── 01_init.sql         # Database initialization script
@@ -96,13 +88,20 @@ face-recognition-infra/
 | `REDIS_PASSWORD` | Redis auth password |
 | `RABBITMQ_USER` | RabbitMQ username |
 | `RABBITMQ_PASSWORD` | RabbitMQ password |
-| `GRAFANA_USER` | Grafana admin username |
-| `GRAFANA_PASSWORD` | Grafana admin password |
 
 ## Web UIs
 
 | Service | URL | Credentials |
 |---------|-----|-------------|
-| Grafana | [http://localhost:3000](http://localhost:3000) | `GRAFANA_USER` / `GRAFANA_PASSWORD` |
-| Prometheus | [http://localhost:9090](http://localhost:9090) | — |
 | RabbitMQ | [http://localhost:15672](http://localhost:15672) | `RABBITMQ_USER` / `RABBITMQ_PASSWORD` |
+
+## Related Services
+
+This is the shared infrastructure layer for a larger system. See [`real-time-face-recognition-attendance-system`](../real-time-face-recognition-attendance-system) for the full architecture overview.
+
+| Repo | Role |
+|---|---|
+| [`face-recognition-api`](../face-recognition-api) | System of record — employees, cameras, transactions, auth |
+| [`face-recognition-edge`](../face-recognition-edge) | Captures video, detects faces (YOLOv8), publishes crops to RabbitMQ |
+| [`face-recognition-server`](../face-recognition-server) | Matches faces (InsightFace), records transactions |
+| [`face-recognition-web`](../face-recognition-web) | Vue 3 dashboard for admins/supervisors |
