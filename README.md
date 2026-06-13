@@ -1,4 +1,19 @@
-# face-recognition-infra
+<div align="center">
+
+# Face Recognition Infra
+
+**Shared infrastructure for the face-recognition attendance system**
+
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)](https://docker.com)
+[![SQL Server](https://img.shields.io/badge/SQL%20Server-Azure%20SQL%20Edge-CC2927?style=flat&logo=microsoftsqlserver&logoColor=white)](https://hub.docker.com/_/microsoft-azure-sql-edge)
+[![Redis](https://img.shields.io/badge/Redis-cache-DC382D?style=flat&logo=redis&logoColor=white)](https://redis.io)
+[![RabbitMQ](https://img.shields.io/badge/RabbitMQ-3-FF6600?style=flat&logo=rabbitmq&logoColor=white)](https://rabbitmq.com)
+
+</div>
+
+---
+
+## Overview
 
 Infrastructure layer for the Face Recognition Attendance System. Provides shared services (database, cache, message queue) via an external Docker network that all other services connect to.
 
